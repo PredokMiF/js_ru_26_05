@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 import { findDOMNode } from 'react-dom'
+import Comment from './Comment'
 
-class Comments extends Component {
+class CommentList extends Component {
 
     state = {
         isOpen: false,
@@ -16,11 +17,8 @@ class Comments extends Component {
     render() {
         const comments =
             this.state.isOpen
-                ? this.state.comments.map(comment =>
-                    <p key={comment.id} style={{marginLeft: "12px", fontSize:"12px", lineHeight: "12px"}}>
-                        <span style={{color: 'gray'}}>{comment.name}</span>&nbsp;
-                        {comment.text}
-                    </p>)
+                ? this.state.comments.map(comment => <Comment key={comment.id} {...comment}/>)
+                //? this.state.comments.map(comment => <Comment id={comment.id} name={comment.name} text={comment.text}/>)
                 : this.state.comments.length
                     ? <a href="javascript:void 0;" onClick={this.showComments}>Показать все комментарии ({this.state.comments.length})</a>
                     : <p style={{color: 'gray'}}>Ни кто ни чего еще не написал</p>
@@ -59,8 +57,8 @@ class Comments extends Component {
     }
 }
 
-Comments.propTypes = {
+CommentList.propTypes = {
     comments: PropTypes.array
 }
 
-export default Comments
+export default CommentList
