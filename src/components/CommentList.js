@@ -52,6 +52,7 @@ class CommentList extends Component {
 
     addComment = () => {
         let comments = this.state.comments.slice();
+        //вот это можно заменить на this.state.comments.concat(...) все хорошо, с добавлением забежали на перед, решение хорошее но в реально жизни так не делают
         comments.push({id:Date.now(), name:'Вы', text:this.state.input})
         this.setState({input: '', comments: comments, isOpen:true})
     }
