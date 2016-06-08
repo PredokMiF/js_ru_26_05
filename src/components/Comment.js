@@ -1,14 +1,14 @@
-import React, { PropTypes } from 'react'
+import React, { PropTypes, Component } from 'react'
 
-function Comment(props) {
-    const {comment: { text, name }} = props
-    return (
-        <div>{text} <b>by {name}</b></div>
-    )
+
+export default function Comment (props) {
+    return <p style={{marginLeft: "12px", fontSize:"12px", lineHeight: "12px"}}>
+        <span style={{color: 'gray'}}>{props.name}</span>&nbsp;
+        {props.text}
+    </p>
 }
 
 Comment.propTypes = {
-    comment: PropTypes.object.isRequired
+    name: PropTypes.string,
+    text: PropTypes.string
 }
-
-export default Comment

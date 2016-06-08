@@ -1,49 +1,41 @@
 import React, { PropTypes, Component } from 'react'
+
+// Decorators
+import contentToggler from '../decorators/contentToggler'
+
+//Components
 import CommentList from './CommentList'
+
 
 class Article extends Component {
 
-/*
-    shouldComponentUpdate(nextProps, nextState) {
-        //pseudo code
-        //nextProps.article.text === this.props.article.text
-        return nextProps.article != this.props.article || this.props.isOpen != nextProps.isOpen
+    static propTypes = {
+        article: PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            text: PropTypes.string,
+            comments: PropTypes.arrayOf(PropTypes.number)
+        })
     }
 
-*/
     render() {
-        const { article, openArticle } = this.props
-        if (!article) return <h3>No article</h3>
+        const { article } = this.props
+
+        const body = this.props.isOpen ? (
+            <div>
+                <section>{article.text}</section>
+                <CommentList articleId={article.id}/>
+            </div>
+        ) : null
 
         return (
             <div>
-                <h3 onClick = {openArticle}>{article.title}</h3>
-                {this.getBody()}
+                <h3 onClick = {this.props.toggleOpen}>{article.title}</h3>
+                {body}
             </div>
         )
     }
 
-    getBody() {
-        const { article, isOpen } = this.props
-        if (!isOpen) return null
-        return (
-            <section>
-                {article.text}
-                <CommentList comments = {article.comments} />
-            </section>
-        )
-    }
 }
 
-Article.propTypes = {
-    article: PropTypes.shape({
-        title: PropTypes.string.isRequired,
-        text: PropTypes.string,
-        id: PropTypes.string.isRequired
-    }),
-    isOpen: PropTypes.bool,
-    openArticle: PropTypes.func,
-    options: PropTypes.object
-}
-
-export default Article
+export default contentToggler(Article)

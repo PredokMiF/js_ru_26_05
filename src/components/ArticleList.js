@@ -1,66 +1,38 @@
 import React, { PropTypes, Component } from 'react'
-import { findDOMNode } from 'react-dom'
-import Article from './Article'
-import Chart from './Chart'
-import oneOpen from '../decorators/oneOpen'
-import Select from 'react-select'
 
-import 'react-select/dist/react-select.css'
+// Stores
+import articleStore from '../stores/articles'
+
+// Decorators
+import storeSubscriber from '../decorators/storeSubscriber'
+
+//Components
+import Article from './Article'
+
 
 class ArticleList extends Component {
 
     state = {
-        selected: null
+        activeArticleId: null
     }
 
-    componentDidMount() {
-        console.log('---', 2)
-        console.log('---', findDOMNode(this.refs.chart))
+    render () {
+        const articleList = articleStore.getList()
+
+        const body = articleList.length
+            ? articleList.map((article) => (
+                <li key={article.id}>
+                    <Article
+                        article={article}
+                        isOpend={article.id===this.state.activeArticleId}
+                        onToggle={(dropped)=>{this.setState({activeArticleId: dropped?article.id:null})}}/>
+                </li>
+            ))
+            : <i>Ничего не найдено</i>
+
+        return <ul>{body}</ul>
     }
 
-    render() {
-        const { articles, isOpen, openItem } = this.props
-
-        const articleItems = articles.map((article) => <li key={article.id}>
-            <Article article = {article}
-                     isOpen = {isOpen(article.id)}
-                openArticle = {openItem(article.id)}
-            />
-        </li>)
-
-        const options = articles.map((article) => ({
-            label: article.title,
-            value: article.id
-        }))
-
-        return (
-            <div>
-                <ul>
-                    {articleItems}
-                </ul>
-                <Chart ref="chart" />
-                <Select
-                    options = {options}
-                    onChange = {this.handleChange}
-                    value= {this.state.selected}
-                    multi = {true}
-                />
-            </div>
-        )
-    }
-
-    handleChange = (selected) => {
-        this.setState({
-            selected
-        })
-    }
 }
 
-ArticleList.propTypes = {
-    articles: PropTypes.array.isRequired,
-
-    isOpen: PropTypes.func.isRequired,
-    openItem: PropTypes.func.isRequired
-}
-
-export default oneOpen(ArticleList)
+export default storeSubscriber(ArticleList, articleStore, function () {this.forceUpdate()})
