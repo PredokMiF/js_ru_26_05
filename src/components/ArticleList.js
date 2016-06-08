@@ -9,6 +9,9 @@ import storeSubscriber from '../decorators/storeSubscriber'
 //Components
 import Article from './Article'
 
+//Styles
+import './ArticleList.css'
+
 
 class ArticleList extends Component {
 
@@ -21,7 +24,7 @@ class ArticleList extends Component {
 
         const body = articleList.length
             ? articleList.map((article) => (
-                <li key={article.id}>
+                <li key={article.id} className="article-list-item">
                     <Article
                         article={article}
                         isOpend={article.id===this.state.activeArticleId}
@@ -30,7 +33,7 @@ class ArticleList extends Component {
             ))
             : <i>Ничего не найдено</i>
 
-        return <ul>{body}</ul>
+        return <ul className="article-list">{body}</ul>
     }
 
 }
