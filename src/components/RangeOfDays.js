@@ -47,7 +47,7 @@ export default class Range extends Component {
 
     handleDayClick = (e, day) => {
         const range = DateUtils.addDayToRange(day, this.state);
-
+        //таки не дождались намного Флакса) хорошо. но лучше тогда вообще от state избавиться и получать from и to через пропсы - все равно вы их там меняете
         this.setState(range);
         this.props.onChang && this.props.onChang(range)
     }
