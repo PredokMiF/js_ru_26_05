@@ -1,5 +1,5 @@
 import React, { PropTypes, Component } from 'react'
-import DayPicker, { DateUtils } from 'react-day-picker';
+import DayPicker from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css'
 
@@ -33,39 +33,12 @@ const localeUtils = {
 }
 
 
-export default class Range extends Component {
+export default function DayPickerRu (props) {
 
-    static propTypes = {
-        onChang: PropTypes.func
-    }
-
-    state = {
-        locale: 'ru',
-        from: null,
-        to: null
-    }
-
-    handleDayClick = (e, day) => {
-        const range = DateUtils.addDayToRange(day, this.state);
-        //таки не дождались намного Флакса) хорошо. но лучше тогда вообще от state избавиться и получать from и to через пропсы - все равно вы их там меняете
-        this.setState(range);
-        this.props.onChang && this.props.onChang(range)
-    }
-
-    render() {
-        const { from, to } = this.state;
-        return (
-            <div className="RangeExample">
-                <DayPicker
-                    locale={this.state.locale}
-                    localeUtils={localeUtils}
-                    ref="daypicker"
-                    numberOfMonths={3}
-                    onDayClick={this.handleDayClick}
-                    selectedDays={day => DateUtils.isDayInRange(day, { from, to })}
-                />
-            </div>
-        );
-    }
+    return <DayPicker
+        locale="ru"
+        localeUtils={localeUtils}
+        {...props}
+    />
 
 }
