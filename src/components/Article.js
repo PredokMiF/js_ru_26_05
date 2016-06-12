@@ -1,5 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 
+// AC
+import { deleteArticle } from '../AC/article'
+
 // Decorators
 import contentToggler from '../decorators/contentToggler'
 
@@ -13,31 +16,34 @@ import './Article.css'
 class Article extends Component {
 
     static propTypes = {
-        article: PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            date: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            text: PropTypes.string,
-            comments: PropTypes.arrayOf(PropTypes.number)
-        })
+        store: PropTypes.object,
+        id: PropTypes.string,
+        isOpend: PropTypes.bool,
+        onToggle: PropTypes.func
     }
 
     render() {
-        const { article } = this.props
+        const article = this.props.store.getById(this.props.id)
 
-        const body = this.props.isOpen ? (
+        const body = (
             <div>
                 <section>{article.text}</section>
-                <CommentList articleId={article.id}/>
+                <CommentList parentId={article.id}/>
             </div>
-        ) : null
+        )
 
         return (
             <div>
-                <h3 onClick = {this.props.toggleOpen} className="article-title">{article.title} <span className="date">({article.date})</span></h3>
-                {body}
+                <h3 onClick = {this.props.toggleOpen} className="article-title">{article.title} <span className="date">({article.date})</span> <a onClick={this.deleteArticleHandler}>(Удалить)</a></h3>
+                {this.props.isOpen ? body : null}
             </div>
         )
+    }
+
+    deleteArticleHandler = (e) => {
+        e.preventDefault()
+        e.stopPropagation()
+        deleteArticle(this.props.id)
     }
 
 }

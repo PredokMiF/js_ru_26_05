@@ -1,10 +1,7 @@
 import React, { PropTypes, Component } from 'react'
 
 // Stores
-import articleStore from '../stores/articles'
-
-// Decorators
-import storeSubscriber from '../decorators/storeSubscriber'
+import { articleStore } from '../stores'
 
 //Components
 import Article from './Article'
@@ -13,22 +10,36 @@ import Article from './Article'
 import './ArticleList.css'
 
 
-class ArticleList extends Component {
+export default class ArticleList extends Component {
 
     state = {
+        list: articleStore.getAll(),
         activeArticleId: null
     }
 
-    render () {
-        const articleList = articleStore.getList()
+    componentDidMount = () => {
+        articleStore.addChangeListener(this.storeUpdated)
+    }
 
-        const body = articleList.length
-            ? articleList.map((article) => (
+    componentWillUnmount = () => {
+        articleStore.removeChangeListener(this.storeUpdated)
+    }
+
+    storeUpdated = () => {
+        this.setState({list:articleStore.getAll()})
+    }
+
+    render () {
+        const list = this.state.list
+        const body = list.length
+            ? list.map((article) => (
                 <li key={article.id} className="article-list-item">
                     <Article
-                        article={article}
+                        store={articleStore}
+                        id={article.id}
                         isOpend={article.id===this.state.activeArticleId}
-                        onToggle={(dropped)=>{this.setState({activeArticleId: dropped?article.id:null})}}/>
+                        onToggle={(dropped)=>{this.setState({activeArticleId: dropped ? article.id : null})}}
+                    />
                 </li>
             ))
             : <i>Ничего не найдено</i>
@@ -37,5 +48,3 @@ class ArticleList extends Component {
     }
 
 }
-
-export default storeSubscriber(ArticleList, articleStore, function () {this.forceUpdate()})

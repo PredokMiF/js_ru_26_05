@@ -1,12 +1,14 @@
 import React, { PropTypes, Component } from 'react'
 import { findDOMNode } from 'react-dom'
 
+// AC
+import { addComment } from '../AC/articleComment'
+
 // Stores
-import articleCommentsStore from '../stores/articleComments'
+import { commentsStore } from '../stores'
 
 // Decorators
 import contentToggler from '../decorators/contentToggler'
-import storeSubscriber from '../decorators/storeSubscriber'
 
 //Components
 import Comment from './Comment'
@@ -16,19 +18,35 @@ import InputText from './InputText'
 class CommentList extends Component {
 
     static propTypes = {
-        articleId: PropTypes.string.isRequired,
+        parentId: PropTypes.string.isRequired,
         isOpen: PropTypes.bool,
         toggleOpen: PropTypes.func
     }
 
-    render() {
-        const comments = articleCommentsStore.getList(this.props.articleId);
+    state = {
+        list: commentsStore.filterBy('parentId', this.props.parentId)
+    }
 
-        var body;
+    componentDidMount = () => {
+        commentsStore.addChangeListener(this.storeUpdated)
+    }
+
+    componentWillUnmount = () => {
+        commentsStore.removeChangeListener(this.storeUpdated)
+    }
+
+    storeUpdated = () => {
+        this.setState({list:commentsStore.filterBy('parentId', this.props.parentId)})
+    }
+
+    render() {
+        const comments = this.state.list
+
+        var body
         if (comments.length === 0) {
             body = <p style={{color: 'gray'}}>Ни кто ни чего еще не написал</p>
         } else if (this.props.isOpen) {
-            body = comments.map(comment => <Comment key={comment.id} {...comment}/>)
+            body = comments.map(comment => <Comment key={comment.id} store={commentsStore} id={comment.id}/>)
         } else {
             body = <a href="javascript:void 0;" onClick={this.props.toggleOpen}>Показать все комментарии ({comments.length})</a>
         }
@@ -49,16 +67,12 @@ class CommentList extends Component {
     addComment = () => {
         const text = this.refs.addComment.state.value
         this.refs.addComment.clear()
-        articleCommentsStore.addComment({
-            articleId: this.props.articleId,
-            text: text
-        })
+
         if (!this.props.isOpen)
             this.props.toggleOpen()
+
+        addComment(this.props.parentId, 'Me', text)
     }
 }
 
-export default
-    contentToggler(
-        storeSubscriber(CommentList, articleCommentsStore, function () {this.forceUpdate()})
-    )
+export default contentToggler(CommentList)

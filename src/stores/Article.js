@@ -1,26 +1,28 @@
-import { myNormalizedArticles } from '../fixtures'
+import AppDispatcher from '../dispatcher'
+import { EventEmitter } from 'events'
 
+import ListStoreAbstract from './ListStoreAbstract'
 
-class Articles {
+const SOME_CHANGE_EVENT = 'SOME_CHANGE_EVENT'
 
-    onChangeHandlers = []
-    articles = myNormalizedArticles.slice()
-    filters = {}
+export default class ArticleStore extends ListStoreAbstract {
 
-    getList(){
-        return this.articles
+    //_filters = {}
+
+    constructor (items=[]) {
+        super(items)
+        this._subscribe((action) => {
+            const {type, payload} = action
+            switch (type) {
+                case 'DELETE_ARTICLE':
+                    this.remove(payload.id)
+                    this._emitChange()
+                    break;
+            }
+        })
     }
 
-    on(handler){
-        handler && this.onChangeHandlers.push(handler)
-    }
-
-    off(handler){
-        if (handler && this.onChangeHandlers.indexOf(handler) !== -1)
-            this.onChangeHandlers.splice(this.onChangeHandlers.indexOf(handler), 1)
-    }
-
-    filterById = (ids = null) => {
+    /*filterById = (ids = null) => {
         if (ids === null || ids.length === 0) {
             ids = null
         } else if (!Array.isArray(ids)) {
@@ -57,8 +59,6 @@ class Articles {
         this.articles.splice(0, this.articles.length, ...articles)
 
         this.onChangeHandlers.forEach(onChangeHandler=>onChangeHandler(this.articles))
-    }
+    }*/
 
 }
-
-export default new Articles()

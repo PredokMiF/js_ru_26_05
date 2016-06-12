@@ -5,13 +5,15 @@ import './Comment.css'
 
 
 export default function Comment (props) {
+    const comment = props.store.getById(props.id)
+
     return <p className="comment">
-        <span className="author-name">{props.name}</span>&nbsp;
-        {props.text}
+        <span className="author-name">{comment.name}</span>&nbsp;
+        {comment.text}
     </p>
 }
 
 Comment.propTypes = {
-    name: PropTypes.string,
-    text: PropTypes.string
+    store: PropTypes.object,
+    id: PropTypes.number
 }
