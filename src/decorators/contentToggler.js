@@ -12,7 +12,6 @@ export default (CustomComponent) => class DecoratedByContentToggler extends Comp
     }
 
     componentWillReceiveProps(nextProps) {
-        console.log(arguments);
         if (this.state.isOpen != nextProps.isOpend)
             this.setState({isOpen: nextProps.isOpend})
     }
