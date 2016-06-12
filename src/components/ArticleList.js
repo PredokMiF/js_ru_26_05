@@ -3,6 +3,9 @@ import React, { PropTypes, Component } from 'react'
 // Stores
 import { articleStore } from '../stores'
 
+//Decorators
+import listStoreSubscriber from '../decorators/listStoreSubscriber';
+
 //Components
 import Select from 'react-select';
 import DayPickerRu from './DayPickerRu'
@@ -17,30 +20,17 @@ import { DateUtils } from 'react-day-picker';
 
 
 
-export default class ArticleList extends Component {
+class ArticleList extends Component {
 
     state = {
-        list: articleStore.getAll(),
         activeArticleId: null,
         filterList: [],
         filterRangeOfDays: {}
     }
 
-    componentDidMount = () => {
-        articleStore.addChangeListener(this.storeUpdated)
-    }
-
-    componentWillUnmount = () => {
-        articleStore.removeChangeListener(this.storeUpdated)
-    }
-
-    storeUpdated = () => {
-        this.setState({list:articleStore.getAll()})
-    }
-
     render () {
 
-        const listFull = this.state.list
+        const listFull = this.props.list
         const filters = <div>
             <Select
                 value={this.state.filterList}
@@ -71,7 +61,7 @@ export default class ArticleList extends Component {
         const filterList = this.state.filterList.map(item=>item.id);
         const {from, to} = this.state.filterRangeOfDays;
 
-        const list = this.state.list.filter((item) => {
+        const list = this.props.list.filter((item) => {
 
             if (filterList && filterList.length && !filterList.includes(item.id))
                 return false;
@@ -107,3 +97,5 @@ export default class ArticleList extends Component {
     }
 
 }
+
+export default listStoreSubscriber(ArticleList, articleStore)

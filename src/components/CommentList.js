@@ -7,7 +7,8 @@ import { addComment } from '../AC/articleComment'
 // Stores
 import { commentsStore } from '../stores'
 
-// Decorators
+//Decorators
+import listStoreSubscriber from '../decorators/listStoreSubscriber';
 import contentToggler from '../decorators/contentToggler'
 
 //Components
@@ -24,24 +25,8 @@ class CommentList extends Component {
         toggleOpen: PropTypes.func
     }
 
-    state = {
-        list: commentsStore.filterBy('parentId', this.props.parentId)
-    }
-
-    componentDidMount = () => {
-        commentsStore.addChangeListener(this.storeUpdated)
-    }
-
-    componentWillUnmount = () => {
-        commentsStore.removeChangeListener(this.storeUpdated)
-    }
-
-    storeUpdated = () => {
-        this.setState({list:commentsStore.filterBy('parentId', this.props.parentId)})
-    }
-
     render() {
-        const comments = this.state.list
+        const comments = this.props.list.filter(item=>item.parentId===this.props.parentId)
 
         var body
         if (comments.length === 0) {
@@ -69,11 +54,12 @@ class CommentList extends Component {
         const text = this.refs.addComment.state.value
         this.refs.addComment.clear()
 
+        addComment(this.props.parentId, 'Me', text)
+
         if (!this.props.isOpen)
             this.props.toggleOpen()
-
-        addComment(this.props.parentId, 'Me', text)
     }
 }
 
-export default contentToggler(CommentList)
+export default listStoreSubscriber(contentToggler(CommentList), commentsStore)
+
