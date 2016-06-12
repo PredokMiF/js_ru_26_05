@@ -28,4 +28,5 @@ export default (CustomComponent) => class DecoratedByContentToggler extends Comp
     render() {
         return <CustomComponent {...this.props} isOpen = {this.state.isOpen} toggleOpen = {this.toggleOpen}/>
     }
+
 }

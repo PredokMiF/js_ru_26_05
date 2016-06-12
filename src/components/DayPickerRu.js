@@ -3,6 +3,7 @@ import DayPicker from 'react-day-picker';
 
 import 'react-day-picker/lib/style.css'
 
+
 const weekdaysLong = {
     // Make sure you start with the right day of the week!
     ru: ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье'],

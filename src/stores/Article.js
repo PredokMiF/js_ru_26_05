@@ -1,5 +1,6 @@
 import AppDispatcher from '../dispatcher'
 import { EventEmitter } from 'events'
+import { DELETE_ARTICLE } from '../EVENTS'
 
 import ListStoreAbstract from './ListStoreAbstract'
 
@@ -12,7 +13,7 @@ export default class ArticleStore extends ListStoreAbstract {
         this._subscribe((action) => {
             const {type, payload} = action
             switch (type) {
-                case 'DELETE_ARTICLE':
+                case DELETE_ARTICLE:
                     this.remove(payload.id)
                     this._emitChange()
                     break;

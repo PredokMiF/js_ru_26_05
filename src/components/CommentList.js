@@ -15,6 +15,7 @@ import Comment from './Comment'
 import InputText from './InputText'
 
 
+
 class CommentList extends Component {
 
     static propTypes = {
