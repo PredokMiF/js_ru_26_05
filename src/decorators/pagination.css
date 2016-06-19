@@ -1,0 +1,15 @@
+.pagination-wrapper ul {
+    display: inline-block;
+    padding-left: 0;
+}
+
+.pagination-wrapper ul li {
+    display: inline-block;
+    list-style: none;
+    padding: 6px;
+    cursor: pointer;
+}
+
+.pagination-wrapper ul li:hover {
+    text-decoration: underline;
+}

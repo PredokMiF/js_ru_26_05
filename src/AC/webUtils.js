@@ -1,23 +1,25 @@
 import $ from 'jquery'
-import AppDispatcher from '../dispatcher'
-import { START, SUCCESS, FAIL } from '../constants'
 
-export function asyncACFactory(apiCall, type) {
+import AppDispatcher from '../dispatcher'
+import { START, SUCCESS, FAIL } from '../event_consts'
+
+export function asyncACFactory(apiCall, evType) {
+
     return (payload) => {
         AppDispatcher.dispatch({
-            type: type + START,
+            type: evType + START,
             payload
         })
 
         setTimeout(() => {
             apiCall(payload)
                 .done((response) => AppDispatcher.dispatch({
-                    type: type + SUCCESS,
+                    type: evType + SUCCESS,
                     response,
                     payload
                 }))
                 .fail(error => AppDispatcher.dispatch({
-                    type: type + FAIL,
+                    type: evType + FAIL,
                     error,
                     payload
                 }))
@@ -25,10 +27,15 @@ export function asyncACFactory(apiCall, type) {
     }
 }
 
-export function loadAllArticlesCall() {
-    return $.get('/api/article')
+export function loadAllArticlesCall({limit, offset}) {
+    return $.get('/api/article', {limit, offset})
 }
 
+export function addArticleCall({title, text}) {
+    return $.post('/api/article', {title, text})
+}
+
+/*
 export function loadArticleByIdCall({ id }) {
     return $.get(`/api/article/${id}`)
-}
+}*/

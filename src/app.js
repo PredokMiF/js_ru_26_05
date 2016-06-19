@@ -1,16 +1,13 @@
 import React from 'react'
 import { render } from 'react-dom'
-import AppContainer from './components/AppContainer'
 
-render(<AppContainer />, document.getElementById('container'))
+import ArticleList from './components/ArticleList'
+import ArticleForm from './components/ArticleForm'
 
 
-/*
-function renderComponent() {
-    render(<ArticleList articles = {articleStore.getAll()} />, document.getElementById('container'))
-}
-
-renderComponent()
-
-articleStore.addChangeListener(renderComponent)
-*/
+render((
+    <div>
+        <ArticleList/>
+        <ArticleForm/>
+    </div>
+), document.getElementById('container'))

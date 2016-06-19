@@ -1,9 +1,11 @@
-import AppDispatcher from '../dispatcher'
 import { EventEmitter } from 'events'
-import DataWrapper from './DataWrapper'
+
+import AppDispatcher from '../dispatcher'
+
 const SOME_CHANGE_EVENT = 'SOME_CHANGE_EVENT'
 
 export default class BasicStore extends EventEmitter {
+
     constructor(stores, initialState = []) {
         super()
         this._stores = stores
@@ -11,32 +13,10 @@ export default class BasicStore extends EventEmitter {
         initialState.forEach(this._add)
     }
 
-    _waitFor(storeNames = []) {
-        const tokens = storeNames.map(name => this.getStoreByName(name).dispatchToken)
-        AppDispatcher.waitFor(tokens)
-    }
+    // Pub/Sub
+
     _subscribe = (callback) => {
         this.dispatchToken = AppDispatcher.register(callback)
-    }
-
-    getAll = () => {
-        return Object.keys(this._items).map(this.getById)
-    }
-
-    getById = (id) => {
-        return this._items[id]
-    }
-
-    getStoreByName = (name) => {
-        return this._stores[name]
-    }
-
-    _add = (item) => {
-        this._items[item.id] = new DataWrapper(item, this)
-    }
-
-    _delete = (id) => {
-        delete this._items[id]
     }
 
     _emitChange = () => {
@@ -50,4 +30,27 @@ export default class BasicStore extends EventEmitter {
     removeChangeListener = (callback) => {
         this.removeListener(SOME_CHANGE_EVENT, callback)
     }
+
+    // Data API
+
+    getAll = () => {
+        return Object.keys(this._items).map(this.getById)
+    }
+
+    getById = (id) => {
+        return this._items[id]
+    }
+
+    _add = (item) => {
+        this._items[item.id] = item
+    }
+
+    remove = (id) => {
+        delete this._items[id]
+    }
+
+    dropData = () => {
+        Object.keys(this._items).forEach(this.remove)
+    }
+
 }

@@ -7,7 +7,8 @@ var port = 3001;
 var app = express();
 
 app.use(bodyParser.json());
-app.use('/api', api)
+
+app.use('/api', api);
 
 app.listen(port, 'localhost', function (err) {
     if (err) {
