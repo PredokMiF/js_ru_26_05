@@ -1,19 +1,27 @@
 import React, { Component, PropTypes } from 'react'
-import ArticleList from '../components/ArticleList'
 import { connect } from 'react-redux'
 
-class ArticleListContainer extends Component {
-    static propTypes = {
+import Article from './Article'
 
+class ArticleList extends Component {
+    static propTypes = {
+        articles: PropTypes.array
     };
 
     render() {
+        const { articles } = this.props
+        const articleList = articles.map(article => <li key={article.id}><Article article={article}/></li>)
+
         return (
-            <ArticleList articles = {this.props.articles} />
+            <ul>
+                {articleList}
+            </ul>
         )
     }
 }
 
-export default connect(state => ({
-    articles: state.articles
-}))(ArticleListContainer)
+export default connect(
+    (state) => ({
+        articles: state.articles
+    })
+)(ArticleList)

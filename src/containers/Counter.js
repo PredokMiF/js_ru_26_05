@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
-import { increment } from '../AC/counter'
 import { connect } from 'react-redux'
+
+import { increment } from '../AC/counter'
 
 class Counter extends Component {
     static propTypes = {
@@ -10,22 +11,24 @@ class Counter extends Component {
 
     render() {
         const { count } = this.props
+
         return (
-            <div>
+            <di>
                 <h1>{count}</h1>
-                <a href = "#" onClick = {this.handleClick}>increment me</a>
-            </div>
+                <a onClick={this.handleClick}>Increment me!</a>
+            </di>
         )
     }
 
-    handleClick = (ev) => {
-        ev.preventDefault()
+    handleClick = (e) => {
+        e.preventDefault()
         this.props.increment()
     }
 }
 
-export default connect((state) => ({
-    count: state.count
-}), {
-    increment
-})(Counter)
+export default connect(
+    (state) => ({
+        count: state.count
+    }),
+    { increment }
+)(Counter)

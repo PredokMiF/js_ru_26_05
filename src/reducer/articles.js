@@ -1,11 +1,21 @@
-import { DELETE_ARTICLE } from '../constants'
+import { REMOVE_ARTICLE, REMOVE_COMMENT } from '../constants'
 import { normalizedArticles } from '../fixtures'
 
 export default (articles = normalizedArticles, action) => {
-    const { type, payload, response, error } = action
+    const { type, payload } = action
 
-    switch (type) {
-        case DELETE_ARTICLE: return articles.filter((article) => article.id != payload.id)
+    switch(type) {
+        case REMOVE_COMMENT:
+            const { id:commentId } = payload
+            return articles.map(article=>{
+                if (article.comments && article.comments.includes(commentId)) {
+                    article = JSON.parse(JSON.stringify(article))
+                    article.comments = article.comments.filter(id=>id!==commentId)
+                    return article
+                } else {
+                    return article
+                }
+            })
     }
 
     return articles

@@ -1,6 +1,6 @@
 import { INCREMENT } from '../constants'
 
-export function increment() {
+export function increment () {
     return {
         type: INCREMENT
     }

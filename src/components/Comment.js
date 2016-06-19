@@ -1,14 +1,29 @@
-import React, { PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react'
+import { connect } from 'react-redux'
+import { removeComment } from '../AC/comment'
 
-function Comment(props) {
-    const {comment: { text, user }} = props
-    return (
-        <div>{text} <b>by {user}</b></div>
-    )
+class Comment extends Component {
+    static propTypes = {
+        comment: PropTypes.object,
+        removeComment: PropTypes.func
+    };
+
+    render() {
+        const {comment: { text, user }} = this.props
+        return (
+            <div>{text} <b>by {user}</b> <a href="#" onClick={this.removeHandler}>Delete</a></div>
+        )
+    }
+
+    removeHandler = (e) => {
+        const { id } = this.props.comment
+
+        e.preventDefault()
+        this.props.removeComment(id)
+    }
 }
 
-Comment.propTypes = {
-    comment: PropTypes.object.isRequired
-}
-
-export default Comment
+export default connect(
+    null,
+    {removeComment}
+)(Comment)
