@@ -1,9 +1,10 @@
 import React from 'react'
-import { Router, Route, browserHistory, hashHistory } from 'react-router'
+import { Router, Route, Redirect, browserHistory, hashHistory } from 'react-router'
 import AppContainer from './containers/AppContainer'
 import Counter from './containers/Counter'
 import ArticleList from './containers/ArticleList'
 import Article from './containers/Article'
+import CommentListAll from './containers/CommentListAll'
 
 export default (
     <Router history = {hashHistory}>
@@ -12,6 +13,8 @@ export default (
             <Route path = "articles" component = {ArticleList} >
                 <Route path = ":id" component = {Article} />
             </Route>
+            <Redirect from="comments" to="comments/1" />
+            <Route path = "comments/:page" component = {CommentListAll} />
         </Route>
     </Router>
 )
