@@ -1,6 +1,7 @@
 import React, { PropTypes, Component } from 'react'
-import CommentList from './CommentList'
-import { deleteArticle, loadArticleById } from '../AC/articles'
+import {connect } from 'react-redux'
+//import CommentList from './CommentList'
+import { deleteArticle } from '../AC/articles'
 
 class Article extends Component {
 
@@ -13,9 +14,11 @@ class Article extends Component {
 
 */
 
+/*
     componentWillReceiveProps({ isOpen, article : { id, text, loading } }) {
         if (isOpen && !text && !loading) loadArticleById({ id })
     }
+*/
 
     render() {
         const { article, openArticle } = this.props
@@ -38,7 +41,7 @@ class Article extends Component {
             <section>
                 {loader}
                 {article.text}
-                <CommentList article = { article} />
+                {/*<CommentList article = { article} />*/}
             </section>
         )
     }
@@ -46,7 +49,7 @@ class Article extends Component {
     handleDeleteArticle = (ev) => {
         ev.preventDefault()
         ev.stopPropagation()
-        deleteArticle(this.props.article.id)
+        this.props.deleteArticle(this.props.article.id)
     }
 }
 
@@ -61,4 +64,4 @@ Article.propTypes = {
     options: PropTypes.object
 }
 
-export default Article
+export default connect(null, { deleteArticle })(Article)
