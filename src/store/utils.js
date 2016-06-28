@@ -1,8 +1,17 @@
-import store from './index'
+export function getRelation(state, entity, relation) {
+    const relStore = state[relation]
+    if (!entity.get(relation) || !relStore) return []
 
-export function getRelation(entity, relation) {
-    const relStore = store.getState()[relation]
-    if (!relStore || !entity[relation]) return []
+    return entity.get(relation).map(id => relStore.getIn(['entities', id.toString()]))
+}
 
-    return relStore.filter((relEntity) => entity[relation].includes(relEntity.id))
+
+export function fromArray(array) {
+    return array.reduce((acc, item) => {
+        return {...acc, [item.id]: item}
+    }, {})
+}
+
+export function toArray(object) {
+    return Object.keys(object).map(id => object[id])
 }
