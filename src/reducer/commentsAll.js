@@ -6,7 +6,7 @@ const defaultState = {
     size: 5,
     loading: false
 }
-
+//эти комменты ничем не отличаються от прошлых, не вижу причины заводить отдельный редюсер. + вы каждый раз перезаписываете комменты, соответственно каждый раз их читаете
 export default (commentsAll = defaultState, action) => {
     const { type, payload, response, error } = action
 
